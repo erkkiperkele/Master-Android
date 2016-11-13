@@ -15,10 +15,15 @@ public class SimpleParallel extends AppCompatActivity {
         TextView tv = (TextView) findViewById(R.id.sample_text);
         tv.setText(stringFromJNI());
 
-        TextView piText = (TextView) findViewById(R.id.pi_text);
+        // Display the value of pi
+        TextView piTextView = (TextView) findViewById(R.id.pi_text);
+        piTextView.setText(getPiText());
+    }
 
-        Double pi = new Double(calculatePi());
-        piText.setText(pi.toString());
+    private String getPiText() {
+        Double pi = calculatePi();
+
+        return pi.toString();
     }
 
     /*****************************************************
