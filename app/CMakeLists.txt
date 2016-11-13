@@ -43,3 +43,12 @@ target_link_libraries( # Specifies the target library.
                        # Links the target library to the log library
                        # included in the NDK.
                        ${log-lib} )
+
+add_library(
+    pi-lib
+    SHARED
+    src/main/cpp/simple-pi.cpp)
+
+target_link_libraries(
+    pi-lib
+    ${log-lib})

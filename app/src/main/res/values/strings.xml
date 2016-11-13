@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Master-Android</string>
+    <string name="ask_pi_placeholder">What\'s pi?</string>
 </resources>

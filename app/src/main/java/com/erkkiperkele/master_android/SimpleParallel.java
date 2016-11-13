@@ -21,6 +21,10 @@ public class SimpleParallel extends AppCompatActivity {
         piText.setText(pi.toString());
     }
 
+    /*****************************************************
+     * Native libraries section (loading and declarations)
+     */
+
     /**
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
@@ -32,5 +36,6 @@ public class SimpleParallel extends AppCompatActivity {
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
+        System.loadLibrary("pi-lib");
     }
 }
