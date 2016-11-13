@@ -16,4 +16,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!" />
+
+    <TextView
+        android:id="@+id/pi_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="What's pi?"
+        android:layout_below="@+id/sample_text"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="12dp"/>
 </RelativeLayout>

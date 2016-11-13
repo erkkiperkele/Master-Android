@@ -11,9 +11,14 @@ public class SimpleParallel extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_parallel);
 
-    // Example of a call to a native method
-    TextView tv = (TextView) findViewById(R.id.sample_text);
-    tv.setText(stringFromJNI());
+        // Example of a call to a native method
+        TextView tv = (TextView) findViewById(R.id.sample_text);
+        tv.setText(stringFromJNI());
+
+        TextView piText = (TextView) findViewById(R.id.pi_text);
+
+        Double pi = new Double(calculatePi());
+        piText.setText(pi.toString());
     }
 
     /**
@@ -21,6 +26,8 @@ public class SimpleParallel extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
+
+    public native double calculatePi();
 
     // Used to load the 'native-lib' library on application startup.
     static {
