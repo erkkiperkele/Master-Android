@@ -11,14 +11,15 @@
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="AllowBackup">
 
-        <activity android:name=".SimplePiActivity">
+        <activity android:name=".SimplePiActivity"
+                  android:label="@string/activity_name_simplePi">
             <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER"/>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
 
                 <data
                     android:host="www.example.com"
