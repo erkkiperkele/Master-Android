@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/simple_pi"
+            android:title="@string/activity_name_simplePi"/>
+        <item
+            android:id="@+id/multi_pi"
+            android:title="@string/activity_name_multiPi"/>
+        <item
+            android:id="@+id/dnn"
+            android:title="@string/activity_name_dnn"/>
+    </group>
+
+</menu>

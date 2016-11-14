@@ -7,36 +7,32 @@ bool FindIsInCircle(double x, double y);
 
 extern "C"
 jdouble
-Java_com_erkkiperkele_master_1android_SimpleParallel_calculatePi(
-        JNIEnv* env,
+Java_com_erkkiperkele_master_1android_SimplePiActivity_calculatePi__I(
+        JNIEnv *env,
         jobject /* this */,
-        jint numberOfOperations)
-{
+        jint numberOfOperations) {
 //    high_resolution_clock::time_point startTime = high_resolution_clock::now();
 
     int circle_count = 0;
     int i = 0;
 
-    while(i< numberOfOperations)
-    {
-        double x = (double)rand() / (double)RAND_MAX;
-        double y = (double)rand() / (double)RAND_MAX;
+    while (i < numberOfOperations) {
+        double x = (double) rand() / (double) RAND_MAX;
+        double y = (double) rand() / (double) RAND_MAX;
         bool isInCircle = FindIsInCircle(x, y);
 
-        if (isInCircle)
-        {
+        if (isInCircle) {
             ++circle_count;
         }
         ++i;
     }
 
-    double PI = 4 * (double)circle_count / (double)numberOfOperations;
+    double PI = 4 * (double) circle_count / (double) numberOfOperations;
 
     return PI;
 }
 
-bool FindIsInCircle(double x, double y)
-{
+bool FindIsInCircle(double x, double y) {
     double distance = sqrt(pow(x, 2) + pow(y, 2));
     return distance < 1;
 }

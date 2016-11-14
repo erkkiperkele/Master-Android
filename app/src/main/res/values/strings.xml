@@ -1,8 +1,18 @@
 <resources>
     <string name="app_name">Master</string>
     <string name="ask_pi_placeholder">What\'s pi?</string>
-    <string name="simplePi_activity_name">Simple Pi</string>
     <string name="operations_label"># of operations:</string>
     <string name="in_progress">In Progress</string>
     <string name="calculating_pi">calculating Pi</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="activity_name_simplePi">Simple Pi</string>
+    <string name="activity_name_multiPi">Multi-threaded Pi</string>
+    <string name="activity_name_dnn">DNN (To Come)</string>
+
+    <string name="description_application_logo">Application Logo</string>
 </resources>
