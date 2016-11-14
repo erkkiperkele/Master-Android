@@ -1,8 +1,10 @@
 package com.erkkiperkele.master_android;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -22,23 +24,11 @@ public class SimpleParallel extends AppCompatActivity {
         setContentView(R.layout.activity_simple_parallel);
         setTitle(getString(R.string.simplePi_activity_name));
 
-        // Example of a call to a native method
-        TextView tv = (TextView) findViewById(R.id.sample_text);
-        tv.setText(stringFromJNI());
-
         initSeekBar();
     }
 
     public void calculatePi(View view) {
-        TextView piTextView = (TextView) findViewById(R.id.pi_text);
-        Double pi = calculatePi(_numberOfOperations);
-
-        piTextView.setText(pi.toString());
-    }
-
-    private void setPi(Double piValue){
-        TextView piTextView = (TextView) findViewById(R.id.pi_text);
-        piTextView.setText(piValue.toString());
+        new CalculatePiTask().execute(_numberOfOperations);
     }
 
     private void initSeekBar() {
@@ -49,49 +39,70 @@ public class SimpleParallel extends AppCompatActivity {
         _seekBarFactor = _maxNumberOfOperations / (sb.getMax() + 1);
         _numberOfOperations = (sb.getProgress() + 1) * _seekBarFactor;
 
-        updateSeekbarText();
+        updateSeekBarText();
 
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 _numberOfOperations = (i + 1) * _seekBarFactor;
-                updateSeekbarText();
+                updateSeekBarText();
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
     }
 
-    private void updateSeekbarText() {
+    private void updateSeekBarText() {
         TextView operationsText = (TextView) findViewById(R.id.operations_text);
         operationsText.setText(NumberFormat
                 .getNumberInstance(Locale.getDefault())
                 .format(_numberOfOperations));
     }
 
-    /*****************************************************
-     * Native libraries section (loading and declarations)
-     */
-
     /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
+     * Loading Native Libraries and declaring native methods
      */
-    public native String stringFromJNI();
-
     public native double calculatePi(int numberOfOperations);
 
-    // Used to load the 'native-lib' library on application startup.
     static {
-        System.loadLibrary("native-lib");
         System.loadLibrary("pi-lib");
     }
+
+    /**
+     * An async task to update UI on UI thread but run calculation in the background
+     */
+    private class CalculatePiTask extends AsyncTask<Integer, Void, Double> {
+
+        @Override
+        protected void onPreExecute() {
+            Button piButton = (Button) findViewById(R.id.pi_button);
+            piButton.setEnabled(false);
+
+            TextView piTextView = (TextView) findViewById(R.id.pi_text);
+            piTextView.setText(R.string.calculating_pi);
+        }
+
+        @Override
+        protected Double doInBackground(Integer... numberOfOperations) {
+            return calculatePi(numberOfOperations[0]);
+        }
+
+        protected void onPostExecute(Double result) {
+            NumberFormat numberFormatter = NumberFormat.getNumberInstance(Locale.getDefault());
+            numberFormatter.setMinimumFractionDigits(6);
+
+            TextView piTextView = (TextView) findViewById(R.id.pi_text);
+            piTextView.setText(numberFormatter.format(result));
+
+            Button piButton = (Button) findViewById(R.id.pi_button);
+            piButton.setEnabled(true);
+        }
+    }
 }
+
