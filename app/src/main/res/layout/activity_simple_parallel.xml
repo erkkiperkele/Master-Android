@@ -17,25 +17,59 @@
         android:layout_height="wrap_content"
         android:text="Hello World!" />
 
-    <TextView
-        android:id="@+id/pi_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ask_pi_placeholder"
-        android:layout_below="@+id/sample_text"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="12dp"/>
-
     <Button
         android:text="@string/ask_pi_placeholder"
         android:background="@color/colorAccent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button"
+        android:id="@+id/pi_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="22dp"
         android:layout_marginBottom="17dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
         android:onClick="calculatePi"/>
+
+    <TextView
+        android:id="@+id/pi_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ask_pi_placeholder"
+        android:layout_above="@+id/pi_button"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="28dp"
+        android:textSize="30sp"/>
+
+    <SeekBar
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:thumb="@color/colorPrimary"
+        android:thumbTint="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="4"
+        android:progress="2"
+        android:id="@+id/operations_seekbar"
+        android:layout_below="@+id/sample_text"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="103dp"/>
+
+    <TextView
+        android:text="@string/operations_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="31dp"
+        android:id="@+id/operations_label_text"
+        android:layout_alignBottom="@+id/operations_seekbar"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:id="@+id/operations_text"
+        android:text="@string/in_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart"
+        android:layout_alignBaseline="@+id/operations_label_text"
+        android:layout_alignBottom="@+id/operations_label_text"
+        android:layout_toEndOf="@+id/operations_label_text"
+        android:layout_marginStart="10dp"/>
 </RelativeLayout>

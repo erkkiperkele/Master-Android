@@ -2,4 +2,7 @@
     <string name="app_name">Master</string>
     <string name="ask_pi_placeholder">What\'s pi?</string>
     <string name="simplePi_activity_name">Simple Pi</string>
+    <string name="operations_label"># of operations:</string>
+    <string name="in_progress">In Progress</string>
+    <string name="calculating_pi">calculating Pi</string>
 </resources>
