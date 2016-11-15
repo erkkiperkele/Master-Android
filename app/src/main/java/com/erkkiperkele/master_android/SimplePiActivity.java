@@ -20,13 +20,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class SimplePiActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    @SuppressWarnings("FieldCanBeLocal")
+    private final int _maxNumberOfOperations = 20000000;
+
     private int _numberOfOperations = 0;
-    private int _maxNumberOfOperations = 20000000;
     private int _seekBarFactor = 0;
 
     @Override
@@ -80,7 +83,7 @@ public class SimplePiActivity extends AppCompatActivity
         return true;
     }
 
-    public void calculatePi(View view) {
+    public void calculatePi(@SuppressWarnings("UnusedParameters") View view) {
         new CalculatePiTask().execute(_numberOfOperations);
     }
 
@@ -144,24 +147,33 @@ public class SimplePiActivity extends AppCompatActivity
         @Override
         protected JResult doInBackground(Integer... numberOfOperations) {
 
-            return calculatePi(numberOfOperations[0]);
+            Long timeStamp = new java.util.Date().getTime();
+            SimpleDateFormat dateFormatter = new SimpleDateFormat(
+                    getString(R.string.simple_datetime_format),
+                    Locale.getDefault());
+
+            String simpleDate = dateFormatter.format(timeStamp);
+
+            return calculatePi(numberOfOperations[0])
+                    .setId(timeStamp)
+                    .setAlgorithmName(getResources().getString(R.string.activity_name_simplePi))
+                    .setTaskSize(_numberOfOperations)
+                    .setTaskSizeUnit(getString(R.string.task_size_unit_operations))
+                    .setExecutionDateTimePretty(simpleDate)
+                    .setThreadsCount(1);
         }
 
         protected void onPostExecute(JResult result) {
             NumberFormat numberFormatter = NumberFormat.getNumberInstance(Locale.getDefault());
             numberFormatter.setMinimumFractionDigits(10);
 
-
-            java.util.Date date= new java.util.Date();
-            Long timeStamp = date.getTime();
-
 //          Write a message to the database
             FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference simplePiDb = database.getReference("simple_pi");
+            DatabaseReference simplePiDb = database.getReference(getString(R.string.database_name_simple_pi));
 
             simplePiDb
-                    .child("results")
-                    .child(timeStamp.toString())
+                    .child(getString(R.string.database_table_results))
+                    .child(result.getId().toString())
                     .setValue(result);
 
             TextView piTextView = (TextView) findViewById(R.id.pi_text);

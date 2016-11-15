@@ -19,4 +19,9 @@
     <string name="activity_name_dnn">DNN (To Come)</string>
 
     <string name="description_application_logo">Application Logo</string>
+
+    <string name="database_name_simple_pi">simple_pi</string>
+    <string name="database_table_results">results</string>
+    <string name="simple_datetime_format">yyyy-MM-dd HH:mm:ss</string>
+    <string name="task_size_unit_operations">number of operations</string>
 </resources>
