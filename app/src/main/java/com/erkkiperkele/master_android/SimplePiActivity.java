@@ -16,6 +16,9 @@ import android.widget.TextView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -147,6 +150,12 @@ public class SimplePiActivity extends AppCompatActivity
         protected void onPostExecute(JResult result) {
             NumberFormat numberFormatter = NumberFormat.getNumberInstance(Locale.getDefault());
             numberFormatter.setMinimumFractionDigits(10);
+
+//            Write a message to the database
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference("simple_pi_result");
+
+            myRef.setValue(result);
 
             TextView piTextView = (TextView) findViewById(R.id.pi_text);
             piTextView.setText(numberFormatter.format(result.getResult()));
