@@ -1,4 +1,4 @@
-package com.erkkiperkele.master_android;
+package com.erkkiperkele.master_android.entity;
 
 @SuppressWarnings("WeakerAccess")
 public class JResult {
@@ -19,7 +19,6 @@ public class JResult {
         this.executionTimeInS = executionTimeInS;
     }
 
-    // Not ideal but that's ok
     public Long getId() {
         return executionDateTime;
     }
@@ -69,7 +68,7 @@ public class JResult {
         return this;
     }
 
-    @SuppressWarnings("SameParameterValue")
+    @SuppressWarnings("SameParameterValue") // Will be removed once multi-thread comes in
     public JResult setThreadsCount(int threadsCount) {
         this.threadsCount = threadsCount;
 

@@ -1,4 +1,4 @@
-package com.erkkiperkele.master_android;
+package com.erkkiperkele.master_android.utility;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;

@@ -1,4 +1,4 @@
-package com.erkkiperkele.master_android;
+package com.erkkiperkele.master_android.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
+import com.erkkiperkele.master_android.R;
 
 public class MultiPiActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

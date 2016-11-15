@@ -11,7 +11,7 @@ jobject CreateJResult(JNIEnv *env, float PI, double time_span);
 
 extern "C"
 jobject
-Java_com_erkkiperkele_master_1android_SimplePiActivity_calculatePi__I(
+Java_com_erkkiperkele_master_1android_activity_SimplePiActivity_calculatePi__I(
         JNIEnv *env,
         jobject /* this */,
         jint numberOfOperations) {
@@ -46,7 +46,7 @@ bool FindIsInCircle(float x, float y) {
 }
 
 jobject CreateJResult(JNIEnv *env, float PI, double time_span) {
-    jclass cls = env->FindClass("com/erkkiperkele/master_android/JResult");
+    jclass cls = env->FindClass("com/erkkiperkele/master_android/entity/JResult");
     jmethodID constructor = env->GetMethodID(cls, "<init>", "(FD)V");
     jobject jResult = env->NewObject(cls, constructor, PI, time_span);
 

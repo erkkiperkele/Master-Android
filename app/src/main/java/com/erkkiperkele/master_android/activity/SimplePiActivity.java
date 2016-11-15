@@ -1,4 +1,4 @@
-package com.erkkiperkele.master_android;
+package com.erkkiperkele.master_android.activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -16,11 +16,12 @@ import android.widget.TextView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.erkkiperkele.master_android.R;
+import com.erkkiperkele.master_android.entity.JResult;
+import com.erkkiperkele.master_android.service.SimplePiDataService;
+import com.erkkiperkele.master_android.utility.DateTimeProvider;
 
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class SimplePiActivity extends AppCompatActivity
@@ -28,6 +29,9 @@ public class SimplePiActivity extends AppCompatActivity
 
     @SuppressWarnings("FieldCanBeLocal")
     private final int _maxNumberOfOperations = 20000000;
+
+    private final DateTimeProvider _dateTimeProvider = DateTimeProvider.getInstance();
+    private final SimplePiDataService _simplePiDataService = SimplePiDataService.getInstance();
 
     private int _numberOfOperations = 0;
     private int _seekBarFactor = 0;
@@ -38,25 +42,8 @@ public class SimplePiActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_simple_pi);
 
+        initNavigationDrawer();
         initSeekBar();
-
-        // Set the action bar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_simple_pi);
-        toolbar.setTitle(R.string.activity_name_simplePi);
-        setSupportActionBar(toolbar);
-
-        // Set the navigation pane
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_simple_pi);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this,
-                drawer,
-                toolbar,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_simple_pi);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -83,8 +70,30 @@ public class SimplePiActivity extends AppCompatActivity
         return true;
     }
 
+    // This method is directly called by the UI, hence the public accessor and the view param
     public void calculatePi(@SuppressWarnings("UnusedParameters") View view) {
+
         new CalculatePiTask().execute(_numberOfOperations);
+    }
+
+    private void initNavigationDrawer() {
+        // Set the action bar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_simple_pi);
+        toolbar.setTitle(R.string.activity_name_simplePi);
+        setSupportActionBar(toolbar);
+
+        // Set the navigation pane
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_simple_pi);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this,
+                drawer,
+                toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_simple_pi);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     private void initSeekBar() {
@@ -147,42 +156,36 @@ public class SimplePiActivity extends AppCompatActivity
         @Override
         protected JResult doInBackground(Integer... numberOfOperations) {
 
-            Long timeStamp = new java.util.Date().getTime();
-            SimpleDateFormat dateFormatter = new SimpleDateFormat(
-                    getString(R.string.simple_datetime_format),
-                    Locale.getDefault());
+            Long timeStamp = _dateTimeProvider.getTimeStampNow();
+            String simpleDate = _dateTimeProvider.getPrettyDateTime(timeStamp);
 
-            String simpleDate = dateFormatter.format(timeStamp);
-
-            return calculatePi(numberOfOperations[0])
+            JResult result = calculatePi(numberOfOperations[0])
                     .setId(timeStamp)
                     .setAlgorithmName(getResources().getString(R.string.activity_name_simplePi))
                     .setTaskSize(_numberOfOperations)
                     .setTaskSizeUnit(getString(R.string.task_size_unit_operations))
                     .setExecutionDateTimePretty(simpleDate)
                     .setThreadsCount(1);
+
+            _simplePiDataService.saveResult(result);
+
+            return result;
         }
 
         protected void onPostExecute(JResult result) {
             NumberFormat numberFormatter = NumberFormat.getNumberInstance(Locale.getDefault());
             numberFormatter.setMinimumFractionDigits(10);
 
-//          Write a message to the database
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference simplePiDb = database.getReference(getString(R.string.database_name_simple_pi));
-
-            simplePiDb
-                    .child(getString(R.string.database_table_results))
-                    .child(result.getId().toString())
-                    .setValue(result);
-
+            // Display Pi calculation result
             TextView piTextView = (TextView) findViewById(R.id.pi_text);
             piTextView.setText(numberFormatter.format(result.getResult()));
 
+            // Display Pi calculation execution time
             TextView piExecutionTimeTextView = (TextView) findViewById(R.id.pi_execution_time_text);
             String executionText = numberFormatter.format(result.getExecutionTimeInS()) + " sec.";
             piExecutionTimeTextView.setText(executionText);
 
+            // Re-enable The pi button
             Button piButton = (Button) findViewById(R.id.pi_button);
             piButton.setEnabled(true);
         }
