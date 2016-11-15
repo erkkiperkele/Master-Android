@@ -5,6 +5,10 @@
     <string name="in_progress">In Progress</string>
     <string name="calculating_pi">calculating Pi</string>
 
+    <string name="execution_time">Execution time:</string>
+    <string name="execution_time_placeholder">It takes some time:</string>
+    <string name="pi_label">Pi:</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

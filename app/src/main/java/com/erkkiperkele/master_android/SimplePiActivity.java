@@ -39,7 +39,6 @@ public class SimplePiActivity extends AppCompatActivity
         toolbar.setTitle(R.string.activity_name_simplePi);
         setSupportActionBar(toolbar);
 
-
         // Set the navigation pane
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_simple_pi);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -119,7 +118,7 @@ public class SimplePiActivity extends AppCompatActivity
     /**
      * Loading Native Libraries and declaring native methods
      */
-    public native double calculatePi(int numberOfOperations);
+    public native JResult calculatePi(int numberOfOperations);
 
     static {
         System.loadLibrary("pi-lib");
@@ -128,7 +127,7 @@ public class SimplePiActivity extends AppCompatActivity
     /**
      * An async task to update UI on UI thread but run calculation in the background
      */
-    private class CalculatePiTask extends AsyncTask<Integer, Void, Double> {
+    private class CalculatePiTask extends AsyncTask<Integer, Void, JResult> {
 
         @Override
         protected void onPreExecute() {
@@ -140,16 +139,21 @@ public class SimplePiActivity extends AppCompatActivity
         }
 
         @Override
-        protected Double doInBackground(Integer... numberOfOperations) {
+        protected JResult doInBackground(Integer... numberOfOperations) {
+
             return calculatePi(numberOfOperations[0]);
         }
 
-        protected void onPostExecute(Double result) {
+        protected void onPostExecute(JResult result) {
             NumberFormat numberFormatter = NumberFormat.getNumberInstance(Locale.getDefault());
-            numberFormatter.setMinimumFractionDigits(6);
+            numberFormatter.setMinimumFractionDigits(10);
 
             TextView piTextView = (TextView) findViewById(R.id.pi_text);
-            piTextView.setText(numberFormatter.format(result));
+            piTextView.setText(numberFormatter.format(result.getResult()));
+
+            TextView piExecutionTimeTextView = (TextView) findViewById(R.id.pi_execution_time_text);
+            String executionText = numberFormatter.format(result.getExecutionTimeInS()) + " sec.";
+            piExecutionTimeTextView.setText(executionText);
 
             Button piButton = (Button) findViewById(R.id.pi_button);
             piButton.setEnabled(true);
