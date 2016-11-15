@@ -151,11 +151,18 @@ public class SimplePiActivity extends AppCompatActivity
             NumberFormat numberFormatter = NumberFormat.getNumberInstance(Locale.getDefault());
             numberFormatter.setMinimumFractionDigits(10);
 
-//            Write a message to the database
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("simple_pi_result");
 
-            myRef.setValue(result);
+            java.util.Date date= new java.util.Date();
+            Long timeStamp = date.getTime();
+
+//          Write a message to the database
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference simplePiDb = database.getReference("simple_pi");
+
+            simplePiDb
+                    .child("results")
+                    .child(timeStamp.toString())
+                    .setValue(result);
 
             TextView piTextView = (TextView) findViewById(R.id.pi_text);
             piTextView.setText(numberFormatter.format(result.getResult()));
