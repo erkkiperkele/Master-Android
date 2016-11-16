@@ -7,26 +7,33 @@ using namespace std;
 using namespace std::chrono;
 
 bool FindIsInCircle(float x, float y);
+
 jobject CreateJResult(JNIEnv *env, float PI, double time_span);
 
 extern "C"
 jobject
-Java_com_erkkiperkele_master_1android_activity_SimplePiActivity_calculatePi__I(
+Java_com_erkkiperkele_master_1android_activity_MultiPiActivity_calculatePi__II(
         JNIEnv *env,
         jobject /* this */,
-        jint numberOfOperations) {
+        jint numberOfOperations,
+        jint numberOfThreads) {
 
     high_resolution_clock::time_point startTime = high_resolution_clock::now();
 
     int circle_count = 0;
+    int num_threads = numberOfThreads;  // Used in the pragma declaration
 
-    for (int i = 0; i<numberOfOperations; i++) {
-        float x = (float) rand() / (float) RAND_MAX;
-        float y = (float) rand() / (float) RAND_MAX;
-        bool isInCircle = FindIsInCircle(x, y);
+    #pragma omp parallel num_threads(num_threads)
+    {
+        #pragma omp for
+        for (int i = 0; i < numberOfOperations; i++) {
+            float x = (float) rand() / (float) RAND_MAX;
+            float y = (float) rand() / (float) RAND_MAX;
+            bool isInCircle = FindIsInCircle(x, y);
 
-        if (isInCircle) {
-            ++circle_count;
+            if (isInCircle) {
+                ++circle_count;
+            }
         }
     }
 

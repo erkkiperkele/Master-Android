@@ -52,3 +52,12 @@ add_library(
 target_link_libraries(
     pi-lib
     ${log-lib})
+
+add_library(
+    parallel-pi-lib
+    SHARED
+    src/main/cpp/parallel-pi.cpp)
+
+target_link_libraries(
+    parallel-pi-lib
+    ${log-lib})

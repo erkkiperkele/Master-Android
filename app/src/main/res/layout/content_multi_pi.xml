@@ -14,4 +14,93 @@
     tools:context="com.erkkiperkele.master_android.activity.MultiPiActivity"
     tools:showIn="@layout/app_bar_multi_pi">
 
+    <Button
+    android:id="@+id/pi_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentEnd="true"
+    android:layout_marginBottom="17dp"
+    android:layout_marginEnd="22dp"
+    android:background="@color/colorAccent"
+    android:onClick="calculateMultiPi"
+    android:text="@string/ask_pi_placeholder"
+    android:textAppearance="@style/TextAppearance.AppCompat.Inverse"/>
+
+    <TextView
+        android:id="@+id/operations_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/operations_label_text"
+        android:layout_alignBottom="@+id/operations_label_text"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/operations_label_text"
+        android:text="@string/in_progress"
+        android:textAlignment="viewStart"/>
+
+    <SeekBar
+        android:id="@+id/operations_seekbar"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="4"
+        android:progress="2"
+        android:thumb="@color/colorPrimary"
+        android:thumbTint="@color/colorAccent"
+        android:layout_below="@+id/operations_text"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/operations_label_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/operations_label"
+        android:layout_marginTop="14dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="12dp"/>
+
+    <TextView
+        android:id="@+id/pi_execution_time_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/execution_time"
+        android:textSize="18sp"
+        android:layout_above="@+id/pi_button"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="30dp"/>
+
+    <TextView
+        android:id="@+id/pi_execution_time_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/execution_time_placeholder"
+        android:textSize="18sp"
+        android:layout_alignBaseline="@+id/pi_execution_time_label"
+        android:layout_alignBottom="@+id/pi_execution_time_label"
+        android:layout_toEndOf="@+id/pi_execution_time_label"
+        android:layout_marginStart="10dp"/>
+
+    <TextView
+        android:id="@+id/pi_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pi_label"
+        android:textSize="30sp"
+        android:layout_alignBaseline="@+id/pi_text"
+        android:layout_alignBottom="@+id/pi_text"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:id="@+id/pi_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:layout_marginStart="13dp"
+        android:text="@string/ask_pi_placeholder"
+        android:textSize="30sp"
+        android:layout_above="@+id/pi_execution_time_label"
+        android:layout_toEndOf="@+id/pi_label"/>
+
 </RelativeLayout>

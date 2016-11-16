@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="activities_array">
-        <item>Simple Pi</item>
-        <item>Multi-Thread Pi</item>
-        <item>Deep Neural Network Optimization</item>
-    </string-array>
-</resources>
