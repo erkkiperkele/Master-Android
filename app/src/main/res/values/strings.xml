@@ -19,4 +19,5 @@
     <string name="description_application_logo">Application Logo</string>
 
     <string name="task_size_unit_operations">number of operations</string>
+    <string name="threads_label">Number of Threads</string>
 </resources>

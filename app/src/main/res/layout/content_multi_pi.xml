@@ -28,6 +28,48 @@
     android:textAppearance="@style/TextAppearance.AppCompat.Inverse"/>
 
     <TextView
+        android:id="@+id/threads_label_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/threads_label"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:id="@+id/threads_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/threads_label_text"
+        android:layout_alignBottom="@+id/threads_label_text"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/threads_label_text"
+        android:text="@string/in_progress"
+        android:textAlignment="viewStart"/>
+
+    <SeekBar
+        android:id="@+id/threads_seekbar"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="3"
+        android:progress="2"
+        android:thumb="@color/colorPrimary"
+        android:thumbTint="@color/colorAccent"
+        android:layout_below="@+id/threads_text"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/operations_label_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/operations_label"
+        android:layout_marginTop="95dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
         android:id="@+id/operations_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -52,14 +94,15 @@
         android:layout_marginTop="20dp"/>
 
     <TextView
-        android:id="@+id/operations_label_text"
+        android:id="@+id/pi_execution_time_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/operations_label"
-        android:layout_marginTop="14dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="12dp"/>
+        android:text="@string/execution_time_placeholder"
+        android:textSize="18sp"
+        android:layout_alignBaseline="@+id/pi_execution_time_label"
+        android:layout_alignBottom="@+id/pi_execution_time_label"
+        android:layout_toEndOf="@+id/pi_execution_time_label"
+        android:layout_marginStart="10dp"/>
 
     <TextView
         android:id="@+id/pi_execution_time_label"
@@ -70,17 +113,6 @@
         android:layout_above="@+id/pi_button"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="30dp"/>
-
-    <TextView
-        android:id="@+id/pi_execution_time_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/execution_time_placeholder"
-        android:textSize="18sp"
-        android:layout_alignBaseline="@+id/pi_execution_time_label"
-        android:layout_alignBottom="@+id/pi_execution_time_label"
-        android:layout_toEndOf="@+id/pi_execution_time_label"
-        android:layout_marginStart="10dp"/>
 
     <TextView
         android:id="@+id/pi_label"

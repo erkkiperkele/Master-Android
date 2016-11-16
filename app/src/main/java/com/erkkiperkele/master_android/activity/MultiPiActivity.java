@@ -35,6 +35,8 @@ public class MultiPiActivity extends AppCompatActivity
 
     private int _numberOfOperations = 0;
     private int _seekBarFactor = 0;
+    private int _numberOfThreads = 2;
+    private int _minNumberOfThreads = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,8 @@ public class MultiPiActivity extends AppCompatActivity
         setContentView(R.layout.activity_multi_pi);
 
         initNavigationDrawer();
-        initSeekBar();
+        initOperationsSeekBar();
+        initThreadsSeekBar();
     }
 
     @Override
@@ -96,7 +99,7 @@ public class MultiPiActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void initSeekBar() {
+    private void initOperationsSeekBar() {
 
         SeekBar sb = (SeekBar) findViewById(R.id.operations_seekbar);
         sb.setProgress(0);
@@ -123,11 +126,44 @@ public class MultiPiActivity extends AppCompatActivity
         });
     }
 
+    private void initThreadsSeekBar() {
+
+        SeekBar sb = (SeekBar) findViewById(R.id.threads_seekbar);
+        sb.setProgress(0);
+
+        _numberOfThreads = _minNumberOfThreads;
+
+        updateThreadsSeekBarText();
+
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                _numberOfThreads =  (int) Math.pow(_minNumberOfThreads, i+1);
+                updateThreadsSeekBarText();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+    }
+
     private void updateSeekBarText() {
         TextView operationsText = (TextView) findViewById(R.id.operations_text);
         operationsText.setText(NumberFormat
                 .getNumberInstance(Locale.getDefault())
                 .format(_numberOfOperations));
+    }
+
+    private void updateThreadsSeekBarText() {
+        TextView operationsText = (TextView) findViewById(R.id.threads_text);
+        operationsText.setText(NumberFormat
+                .getNumberInstance(Locale.getDefault())
+                .format(_numberOfThreads));
     }
 
     /**
@@ -159,13 +195,13 @@ public class MultiPiActivity extends AppCompatActivity
             Long timeStamp = _dateTimeProvider.getTimeStampNow();
             String simpleDate = _dateTimeProvider.getPrettyDateTime(timeStamp);
 
-            JResult result = calculatePi(numberOfOperations[0], 4)
+            JResult result = calculatePi(numberOfOperations[0], _numberOfThreads)
                     .setId(timeStamp)
                     .setAlgorithmName(getResources().getString(R.string.activity_name_multiPi))
                     .setTaskSize(_numberOfOperations)
                     .setTaskSizeUnit(getString(R.string.task_size_unit_operations))
                     .setExecutionDateTimePretty(simpleDate)
-                    .setThreadsCount(1);
+                    .setThreadsCount(_numberOfThreads);
 
             _multiPiDataService.saveResult(result);
 
