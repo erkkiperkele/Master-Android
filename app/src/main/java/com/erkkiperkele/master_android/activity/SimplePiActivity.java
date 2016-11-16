@@ -8,6 +8,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -19,13 +20,32 @@ import android.support.v7.widget.Toolbar;
 import com.erkkiperkele.master_android.R;
 import com.erkkiperkele.master_android.entity.JResult;
 import com.erkkiperkele.master_android.service.SimplePiDataService;
+import com.erkkiperkele.master_android.service.UserService;
 import com.erkkiperkele.master_android.utility.DateTimeProvider;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.text.NumberFormat;
 import java.util.Locale;
 
 public class SimplePiActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements
+        NavigationView.OnNavigationItemSelectedListener,
+        GoogleApiClient.OnConnectionFailedListener {
+
+    private static final String LOG_FIREBASE_AUTH = "firebase_auth";
+    private static final String LOG_GOOGLE_AUTH = "firebase_auth";
 
     @SuppressWarnings("FieldCanBeLocal")
     private final int _maxNumberOfOperations = 20000000;
@@ -36,6 +56,11 @@ public class SimplePiActivity extends AppCompatActivity
     private int _numberOfOperations = 0;
     private int _seekBarFactor = 0;
 
+    private GoogleApiClient _GoogleApiClient;
+    private final int RC_SIGN_IN = 1;
+    private FirebaseAuth _firebaseAuth;
+    private FirebaseAuth.AuthStateListener _firebaseAuthListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +69,9 @@ public class SimplePiActivity extends AppCompatActivity
 
         initNavigationDrawer();
         initSeekBar();
+
+        initGoogleSignin();
+        initFirebaseSignIn();
     }
 
     @Override
@@ -70,12 +98,6 @@ public class SimplePiActivity extends AppCompatActivity
         return true;
     }
 
-    // This method is directly called by the UI, hence the public accessor and the view param
-    public void calculatePi(@SuppressWarnings("UnusedParameters") View view) {
-
-        new CalculatePiTask().execute(_numberOfOperations);
-    }
-
     private void initNavigationDrawer() {
         // Set the action bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_simple_pi);
@@ -94,6 +116,97 @@ public class SimplePiActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_simple_pi);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void initGoogleSignin() {
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        _GoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+    }
+
+    private void initFirebaseSignIn() {
+        _firebaseAuth = FirebaseAuth.getInstance();
+        _firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
+
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    Log.d(LOG_FIREBASE_AUTH, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    Log.d(LOG_FIREBASE_AUTH, "onAuthStateChanged:signed_out");
+                }
+            }
+        };
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        UserService userService = UserService.getInstance();
+
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                userService.setGoogleSignInAccount(result.getSignInAccount());
+                firebaseAuthWithGoogle(userService.getGoogleSignInAccount());
+            } else {
+                Log.w(LOG_GOOGLE_AUTH, "signInWithCredential:" + result.getStatus().toString());
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d(LOG_FIREBASE_AUTH, "firebaseAuthWithGoogle:" + acct.getId());
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        _firebaseAuth
+                .signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(LOG_FIREBASE_AUTH, "signInWithCredential:onComplete:" + task.isSuccessful());
+
+                        if (!task.isSuccessful()) {
+                            Log.w(LOG_FIREBASE_AUTH, "signInWithCredential", task.getException());
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        _firebaseAuth.addAuthStateListener(_firebaseAuthListener);
+
+        if (!UserService.getInstance().isConnected()) {
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(_GoogleApiClient);
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        }
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (_firebaseAuthListener != null) {
+            _firebaseAuth.removeAuthStateListener(_firebaseAuthListener);
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+        Log.d(LOG_GOOGLE_AUTH, "Master! Google Authentication Failed!");
     }
 
     private void initSeekBar() {
@@ -128,6 +241,12 @@ public class SimplePiActivity extends AppCompatActivity
         operationsText.setText(NumberFormat
                 .getNumberInstance(Locale.getDefault())
                 .format(_numberOfOperations));
+    }
+
+    // This method is directly called by the UI, hence the public accessor and the view param
+    public void calculatePi(@SuppressWarnings("UnusedParameters") View view) {
+
+        new CalculatePiTask().execute(_numberOfOperations);
     }
 
     /**
@@ -191,4 +310,3 @@ public class SimplePiActivity extends AppCompatActivity
         }
     }
 }
-

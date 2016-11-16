@@ -1,27 +1,23 @@
 package com.erkkiperkele.master_android.service;
 
-
 import com.erkkiperkele.master_android.entity.JResult;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class MultiPiDataService {
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final String DatabaseNameMultiPi = "multi_pi";
+    private final String DataNameMultiPi = "multi_pi";
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final String DatabaseTableResults = "results";
+    private final String DataNameResults = "results";
 
-    private final DatabaseReference _multiPiDb;
+    private final FirebaseService _firebaseService;
 
     // WARNING: singleton pattern -> make sure '_instance' is the last field else runtime error
     private final static MultiPiDataService _instance = new MultiPiDataService();
 
     private MultiPiDataService() {
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        _multiPiDb = database.getReference(DatabaseNameMultiPi);
+        _firebaseService = FirebaseService.getInstance();
     }
 
     public static MultiPiDataService getInstance() {
@@ -31,8 +27,10 @@ public class MultiPiDataService {
 
     public void saveResult(JResult result) {
 
-        _multiPiDb
-                .child(DatabaseTableResults)
+        _firebaseService.getFireDb()
+                .child("users/" + _firebaseService.getFirebaseUid())
+                .child(DataNameMultiPi)
+                .child(DataNameResults)
                 .child(result.getId().toString())
                 .setValue(result);
     }
