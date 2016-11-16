@@ -12,7 +12,8 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags "-frtti -fexceptions -std=c++11 -std=gnu++11"
+                cppFlags "-frtti -fexceptions -std=c++11 -std=gnu++11 "
+//                cppFlags "-frtti -fexceptions -std=c++11 -std=gnu++11 -fopenmp"
             }
         }
     }

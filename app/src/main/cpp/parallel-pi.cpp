@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <chrono>
+//#include <omp.h>      // TODO: Fix openmp!
 
 using namespace std;
 using namespace std::chrono;
@@ -23,8 +24,11 @@ Java_com_erkkiperkele_master_1android_activity_MultiPiActivity_calculatePi__II(
     int circle_count = 0;
     int num_threads = numberOfThreads;  // Used in the pragma declaration
 
+    // TODO: Fix openmp! (pragma simply ignored at the moment)
     #pragma omp parallel num_threads(num_threads)
     {
+//        int actualThreadNumber = omp_get_num_threads();   // Fix Openmp!
+
         #pragma omp for
         for (int i = 0; i < numberOfOperations; i++) {
             float x = (float) rand() / (float) RAND_MAX;
