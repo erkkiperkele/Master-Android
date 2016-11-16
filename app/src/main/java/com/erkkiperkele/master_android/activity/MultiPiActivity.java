@@ -19,7 +19,9 @@ import android.widget.TextView;
 import com.erkkiperkele.master_android.R;
 import com.erkkiperkele.master_android.entity.JResult;
 import com.erkkiperkele.master_android.service.MultiPiDataService;
+import com.erkkiperkele.master_android.service.UserService;
 import com.erkkiperkele.master_android.utility.DateTimeProvider;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -95,8 +97,20 @@ public class MultiPiActivity extends AppCompatActivity
                 R.string.navigation_drawer_close);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_multi);
         navigationView.setNavigationItemSelectedListener(this);
+        updateNavigationHeader();
+    }
+
+    private void updateNavigationHeader(){
+        GoogleSignInAccount user = UserService.getInstance().getGoogleSignInAccount();
+
+        if (user != null){
+            NavigationView navDrawer = (NavigationView) findViewById(R.id.nav_view_multi);
+            View header = navDrawer.getHeaderView(0);
+            TextView headerUserName = (TextView) header.findViewById(R.id.nav_header_user_name);
+            headerUserName.setText(user.getDisplayName());
+        }
     }
 
     private void initOperationsSeekBar() {

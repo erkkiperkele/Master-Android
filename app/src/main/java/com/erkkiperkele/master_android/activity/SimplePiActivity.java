@@ -116,6 +116,7 @@ public class SimplePiActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_simple_pi);
         navigationView.setNavigationItemSelectedListener(this);
+        updateNavigationHeader();
     }
 
     private void initGoogleSignin() {
@@ -158,6 +159,7 @@ public class SimplePiActivity extends AppCompatActivity
             if (result.isSuccess()) {
                 userService.setGoogleSignInAccount(result.getSignInAccount());
                 firebaseAuthWithGoogle(userService.getGoogleSignInAccount());
+                updateNavigationHeader();
             } else {
                 Log.w(LOG_GOOGLE_AUTH, "signInWithCredential:" + result.getStatus().toString());
             }
@@ -241,6 +243,17 @@ public class SimplePiActivity extends AppCompatActivity
         operationsText.setText(NumberFormat
                 .getNumberInstance(Locale.getDefault())
                 .format(_numberOfOperations));
+    }
+
+    private void updateNavigationHeader(){
+        GoogleSignInAccount user = UserService.getInstance().getGoogleSignInAccount();
+
+        if (user != null){
+            NavigationView navDrawer = (NavigationView) findViewById(R.id.nav_view_simple_pi);
+            View header = navDrawer.getHeaderView(0);
+            TextView headerUserName = (TextView) header.findViewById(R.id.nav_header_user_name);
+            headerUserName.setText(user.getDisplayName());
+        }
     }
 
     // This method is directly called by the UI, hence the public accessor and the view param
