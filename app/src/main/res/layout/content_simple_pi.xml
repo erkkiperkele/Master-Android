@@ -49,6 +49,8 @@
         android:thumbTint="@color/colorAccent"
         android:layout_below="@+id/operations_text"
         android:layout_alignParentStart="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"/>
 
     <TextView
@@ -59,7 +61,7 @@
         android:layout_marginTop="14dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="12dp"/>
+        android:layout_marginStart="30dp"/>
 
     <TextView
         android:id="@+id/pi_execution_time_label"
