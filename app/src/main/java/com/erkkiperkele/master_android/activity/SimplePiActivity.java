@@ -54,7 +54,8 @@ public class SimplePiActivity extends AppCompatActivity
     private static final String LOG_GOOGLE_AUTH = "firebase_auth";
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final int _maxNumberOfOperations = 20000000;
+    private static final int MAX_NUMBER_OF_OPERATIONS = 20000000;
+    private static final int QUERY_SIZE = 20;
 
     private final DateTimeProvider _dateTimeProvider = DateTimeProvider.getInstance();
     private final SimplePiDataService _simplePiDataService = SimplePiDataService.getInstance();
@@ -228,8 +229,7 @@ public class SimplePiActivity extends AppCompatActivity
         Query query = _simplePiDataService
                 .getUserResultsReference()
                 .orderByChild("id")
-                .limitToLast(50)
-        ;
+                .limitToLast(QUERY_SIZE);
 
         final Context context = getApplicationContext();
         FirebaseRecyclerAdapter adapter = new FirebaseRecyclerAdapter<JResult, ResultViewHolder>(
@@ -251,7 +251,7 @@ public class SimplePiActivity extends AppCompatActivity
         SeekBar sb = (SeekBar) findViewById(R.id.operations_seekbar);
         sb.setProgress(0);
 
-        _seekBarFactor = _maxNumberOfOperations / (sb.getMax() + 1);
+        _seekBarFactor = MAX_NUMBER_OF_OPERATIONS / (sb.getMax() + 1);
         _numberOfOperations = (sb.getProgress() + 1) * _seekBarFactor;
 
         updateSeekBarText();

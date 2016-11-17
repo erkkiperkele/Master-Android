@@ -1,5 +1,6 @@
 package com.erkkiperkele.master_android.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +24,10 @@ import com.erkkiperkele.master_android.entity.JResult;
 import com.erkkiperkele.master_android.service.MultiPiDataService;
 import com.erkkiperkele.master_android.service.UserService;
 import com.erkkiperkele.master_android.utility.DateTimeProvider;
+import com.erkkiperkele.master_android.utility.ResultViewHolder;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.database.Query;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -30,7 +36,8 @@ public class MultiPiActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final int _maxNumberOfOperations = 20000000;
+    private static final int MAX_NUMBER_OF_OPERATIONS = 20000000;
+    private static final int QUERY_SIZE = 20;
 
     private final DateTimeProvider _dateTimeProvider = DateTimeProvider.getInstance();
     private final MultiPiDataService _multiPiDataService = MultiPiDataService.getInstance();
@@ -49,6 +56,7 @@ public class MultiPiActivity extends AppCompatActivity
         initNavigationDrawer();
         initOperationsSeekBar();
         initThreadsSeekBar();
+        initResultsRecyclerView();
     }
 
     @Override
@@ -113,12 +121,39 @@ public class MultiPiActivity extends AppCompatActivity
         }
     }
 
+    private void initResultsRecyclerView(){
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_multi_pi);
+
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setReverseLayout(true);
+        recyclerView.setLayoutManager(layoutManager);
+
+        Query query = _multiPiDataService
+                .getUserResultsReference()
+                .orderByChild("id")
+                .limitToLast(QUERY_SIZE);
+
+        final Context context = getApplicationContext();
+        FirebaseRecyclerAdapter adapter = new FirebaseRecyclerAdapter<JResult, ResultViewHolder>(
+                JResult.class,
+                R.layout.pi_result_item,
+                ResultViewHolder.class,
+                query) {
+
+            @Override
+            protected void populateViewHolder(ResultViewHolder viewHolder, JResult model, int position) {
+                viewHolder.setResult(model, context);
+            }
+        };
+        recyclerView.setAdapter(adapter);
+    }
+
     private void initOperationsSeekBar() {
 
         SeekBar sb = (SeekBar) findViewById(R.id.operations_seekbar);
         sb.setProgress(0);
 
-        _seekBarFactor = _maxNumberOfOperations / (sb.getMax() + 1);
+        _seekBarFactor = MAX_NUMBER_OF_OPERATIONS / (sb.getMax() + 1);
         _numberOfOperations = (sb.getProgress() + 1) * _seekBarFactor;
 
         updateSeekBarText();

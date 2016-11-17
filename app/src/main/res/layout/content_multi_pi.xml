@@ -141,4 +141,15 @@
         android:layout_above="@+id/pi_execution_time_label"
         android:layout_toEndOf="@+id/pi_label"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_multi_pi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/operations_seekbar"
+        android:layout_alignStart="@+id/operations_label_text"
+        android:layout_marginTop="39dp"
+        android:layout_marginBottom="20dp"
+        android:layout_alignEnd="@+id/pi_button"
+        android:layout_above="@+id/pi_label"/>
+
 </RelativeLayout>

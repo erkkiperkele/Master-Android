@@ -1,6 +1,7 @@
 package com.erkkiperkele.master_android.service;
 
 import com.erkkiperkele.master_android.entity.JResult;
+import com.google.firebase.database.Query;
 
 public class MultiPiDataService {
 
@@ -33,5 +34,14 @@ public class MultiPiDataService {
                 .child(DataNameResults)
                 .child(result.getId().toString())
                 .setValue(result);
+    }
+
+    public Query getUserResultsReference() {
+
+        return _firebaseService.getFireDb()
+                .child("users")
+                .child(_firebaseService.getFirebaseUid())
+                .child(DataNameMultiPi)
+                .child(DataNameResults);
     }
 }
