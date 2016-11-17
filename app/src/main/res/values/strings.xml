@@ -20,4 +20,8 @@
 
     <string name="task_size_unit_operations">number of operations</string>
     <string name="threads_label">Number of Threads</string>
+
+    <string name="result_execution_time_unit">&#160;sec</string>
+    <string name="result_task_size_unit">&#160;op.</string>
+    <string name="result_threads_unit">&#160;thread(s)</string>
 </resources>

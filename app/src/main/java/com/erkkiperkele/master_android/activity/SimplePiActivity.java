@@ -1,5 +1,6 @@
 package com.erkkiperkele.master_android.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -230,6 +231,7 @@ public class SimplePiActivity extends AppCompatActivity
                 .limitToLast(50)
         ;
 
+        final Context context = getApplicationContext();
         FirebaseRecyclerAdapter adapter = new FirebaseRecyclerAdapter<JResult, ResultViewHolder>(
                 JResult.class,
                 R.layout.pi_result_item,
@@ -238,7 +240,7 @@ public class SimplePiActivity extends AppCompatActivity
 
             @Override
             protected void populateViewHolder(ResultViewHolder viewHolder, JResult model, int position) {
-                viewHolder.setText(model.getExecutionDateTimePretty());
+                viewHolder.setResult(model, context);
             }
         };
         recyclerView.setAdapter(adapter);
