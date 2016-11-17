@@ -2,6 +2,7 @@ package com.erkkiperkele.master_android.service;
 
 
 import com.erkkiperkele.master_android.entity.JResult;
+import com.google.firebase.database.DatabaseReference;
 
 public class SimplePiDataService {
 
@@ -27,11 +28,17 @@ public class SimplePiDataService {
 
     public void saveResult(JResult result) {
 
-        _firebaseService.getFireDb()
-                .child("users/" + _firebaseService.getFirebaseUid())
-                .child(DataNameSimplePi)
-                .child(DataNameResults)
+        getUserResultsReference()
                 .child(result.getId().toString())
                 .setValue(result);
+    }
+
+    public DatabaseReference getUserResultsReference(){
+
+        return _firebaseService.getFireDb()
+                .child("users")
+                .child(_firebaseService.getFirebaseUid())
+                .child(DataNameSimplePi)
+                .child(DataNameResults);
     }
 }

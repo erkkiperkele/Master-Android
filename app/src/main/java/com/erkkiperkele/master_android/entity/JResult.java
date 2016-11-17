@@ -3,8 +3,8 @@ package com.erkkiperkele.master_android.entity;
 @SuppressWarnings("WeakerAccess")
 public class JResult {
 
-    private final float result;
-    private final double executionTimeInS;
+    private float result;
+    private double executionTimeInS;
 
     private Long executionDateTime;
     private String algorithmName;
@@ -12,6 +12,11 @@ public class JResult {
     private int taskSize;
     private String taskSizeUnit;
     private String executionDateTimePretty;
+
+    // FirebaseAdapter requires an empty constructor
+    // Would be nice to separate entities needed for c++ / firebase write / firebase read
+    public JResult() {
+    }
 
     public JResult(float result, double executionTimeInS) {
         this.result = result;

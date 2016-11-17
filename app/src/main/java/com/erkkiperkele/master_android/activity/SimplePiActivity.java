@@ -8,6 +8,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +24,8 @@ import com.erkkiperkele.master_android.entity.JResult;
 import com.erkkiperkele.master_android.service.SimplePiDataService;
 import com.erkkiperkele.master_android.service.UserService;
 import com.erkkiperkele.master_android.utility.DateTimeProvider;
+import com.erkkiperkele.master_android.utility.ResultViewHolder;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -35,6 +39,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.Query;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -72,6 +77,8 @@ public class SimplePiActivity extends AppCompatActivity
 
         initGoogleSignin();
         initFirebaseSignIn();
+
+        initResultsRecyclerView();
     }
 
     @Override
@@ -194,7 +201,6 @@ public class SimplePiActivity extends AppCompatActivity
             Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(_GoogleApiClient);
             startActivityForResult(signInIntent, RC_SIGN_IN);
         }
-
     }
 
     @Override
@@ -209,6 +215,33 @@ public class SimplePiActivity extends AppCompatActivity
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
         Log.d(LOG_GOOGLE_AUTH, "Master! Google Authentication Failed!");
+    }
+
+    private void initResultsRecyclerView(){
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_simple_pi);
+
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setReverseLayout(true);
+        recyclerView.setLayoutManager(layoutManager);
+
+        Query query = _simplePiDataService
+                .getUserResultsReference()
+                .orderByChild("id")
+                .limitToLast(50)
+        ;
+
+        FirebaseRecyclerAdapter adapter = new FirebaseRecyclerAdapter<JResult, ResultViewHolder>(
+                JResult.class,
+                R.layout.pi_result_item,
+                ResultViewHolder.class,
+                query) {
+
+            @Override
+            protected void populateViewHolder(ResultViewHolder viewHolder, JResult model, int position) {
+                viewHolder.setText(model.getExecutionDateTimePretty());
+            }
+        };
+        recyclerView.setAdapter(adapter);
     }
 
     private void initSeekBar() {
