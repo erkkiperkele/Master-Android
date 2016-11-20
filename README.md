@@ -2,6 +2,22 @@
 I wish I knew (better)
 
 
+## Useful links on how to add C++ libs to Android project
+
+* Add C++ to project
+https://developer.android.com/studio/projects/add-native-code.html
+
+* Android.mk
+https://developer.android.com/ndk/guides/android_mk.html
+
+* NDK's APIs
+https://developer.android.com/ndk/guides/stable_apis.html
+
+* Simple GitHub project with static and Shared libraries
+https://github.com/googlesamples/android-ndk/tree/master-cmake/hello-libs
+
+
+
 ## Random links for DNN
 
 * Caffe Github project:
