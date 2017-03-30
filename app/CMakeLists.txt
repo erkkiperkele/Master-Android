@@ -44,14 +44,18 @@ target_link_libraries( # Specifies the target library.
                        # included in the NDK.
                        ${log-lib} )
 
+
+#libraries to build
+
+add_library(
+    ParallelCalculations
+    SHARED
+    src/main/cpp/ParallelCalculations.cpp)
+
 add_library(
     pi-lib
     SHARED
     src/main/cpp/simple-pi.cpp)
-
-target_link_libraries(
-    pi-lib
-    ${log-lib})
 
 add_library(
     parallel-pi-lib
@@ -60,4 +64,9 @@ add_library(
 
 target_link_libraries(
     parallel-pi-lib
+    ParallelCalculations
+    ${log-lib})
+
+target_link_libraries(
+    pi-lib
     ${log-lib})

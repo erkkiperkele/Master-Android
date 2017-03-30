@@ -35,7 +35,8 @@ https://github.com/sh1r0/caffe-android-demo
 * doc on openmp
 http://bisqwit.iki.fi/story/howto/openmp/#ParallelConstruct
 
-
+* fix for openmp on Android ndk
+https://groups.google.com/forum/#!topic/android-ndk/pUfqxURgNbQ/discussion
 
 
 ## Native Debugging checklist
@@ -57,9 +58,6 @@ https://github.com/noritsuna/HandDetectorOpenMP
 
 * Android CMake (Same guy as for Caffe!)
 https://github.com/sh1r0/android-cmake
-
-
-
 
 
 

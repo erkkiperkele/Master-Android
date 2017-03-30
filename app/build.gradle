@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "21.1.2"
+    buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "com.erkkiperkele.master_android"
         minSdkVersion 24
@@ -12,8 +12,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags "-frtti -fexceptions -std=c++11 -std=gnu++11 "
-//                cppFlags "-frtti -fexceptions -std=c++11 -std=gnu++11 -fopenmp"
+                cppFlags "-frtti -fexceptions -std=c++11 -std=gnu++11"
             }
         }
     }
