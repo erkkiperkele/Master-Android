@@ -9,22 +9,24 @@ float ParallelCalculations::CalculateParallelPi(int numberOfOperations, int numb
     int circle_count = 0;
     int num_threads = numberOfThreads;  // Used in the pragma declaration
 
-    // TODO: Fix openmp! (pragma simply ignored at the moment)
 #pragma omp parallel num_threads(num_threads)
     {
-         int actualThreadNumber = omp_get_num_threads();
+        int threadNumberOfOperations = numberOfOperations / omp_get_num_threads();
+        int innerCircleCount = 0;
 
-        #pragma omp for
-        for (int i = 0; i < numberOfOperations/actualThreadNumber; i++) {
+        for (int i = 0; i < threadNumberOfOperations; i++) {
             float x = (float) rand() / (float) RAND_MAX;
             float y = (float) rand() / (float) RAND_MAX;
             bool isInCircle = ParallelCalculations::FindIsInCircle(x, y);
 
             if (isInCircle) {
-                #pragma omp atomic
-                ++circle_count;
+                ++innerCircleCount;
+
             }
         }
+
+#pragma omp atomic
+        circle_count += innerCircleCount;
     }
 
     float PI = 4 * (float) circle_count / (float) numberOfOperations;
