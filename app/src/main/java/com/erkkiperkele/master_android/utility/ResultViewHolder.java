@@ -29,6 +29,7 @@ public class ResultViewHolder extends RecyclerView.ViewHolder {
                 .setExecutionTime(result.getExecutionTimeInS())
                 .setNumberOfOperations(result.getTaskSize())
                 .setNumberOfThreads(result.getThreadsCount())
+                .setPhoneModel(result.getPhoneModel())
         ;
     }
 
@@ -77,6 +78,13 @@ public class ResultViewHolder extends RecyclerView.ViewHolder {
                 .append(formattedNumber)
                 .append(_context.getString(R.string.result_threads_unit))
                 .toString());
+
+        return this;
+    }
+
+    private ResultViewHolder setPhoneModel(String phoneModel){
+        TextView text = (TextView) _resultItemView.findViewById(R.id.pi_phone_model);
+        text.setText(phoneModel);
 
         return this;
     }

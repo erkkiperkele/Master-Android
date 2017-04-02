@@ -1,8 +1,11 @@
 package com.erkkiperkele.master_android.entity;
 
+import android.os.Build;
+
 @SuppressWarnings("WeakerAccess")
 public class JResult {
 
+    private String phoneModel;
     private float result;
     private double executionTimeInS;
 
@@ -20,8 +23,8 @@ public class JResult {
 
     public JResult(float result, double executionTimeInS) {
         this.result = result;
-
         this.executionTimeInS = executionTimeInS;
+        this.phoneModel = Build.MODEL;
     }
 
     public Long getId() {
@@ -96,5 +99,9 @@ public class JResult {
         this.executionDateTimePretty = executionDateTimePretty;
 
         return this;
+    }
+
+    public String getPhoneModel() {
+        return phoneModel;
     }
 }

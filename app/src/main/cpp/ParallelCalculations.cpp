@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <cmath>
 
-//#include <omp.h>      // TODO: Fix openmp!
+#include <omp.h>
 #include "ParallelCalculations.h"
 
 
@@ -10,17 +10,18 @@ float ParallelCalculations::CalculateParallelPi(int numberOfOperations, int numb
     int num_threads = numberOfThreads;  // Used in the pragma declaration
 
     // TODO: Fix openmp! (pragma simply ignored at the moment)
-//#pragma omp parallel num_threads(num_threads)
+#pragma omp parallel num_threads(num_threads)
     {
-         //int actualThreadNumber = omp_get_num_threads();   // Fix Openmp!
+         int actualThreadNumber = omp_get_num_threads();
 
-        //#pragma omp for
-        for (int i = 0; i < numberOfOperations; i++) {
+        #pragma omp for
+        for (int i = 0; i < numberOfOperations/actualThreadNumber; i++) {
             float x = (float) rand() / (float) RAND_MAX;
             float y = (float) rand() / (float) RAND_MAX;
             bool isInCircle = ParallelCalculations::FindIsInCircle(x, y);
 
             if (isInCircle) {
+                #pragma omp atomic
                 ++circle_count;
             }
         }
