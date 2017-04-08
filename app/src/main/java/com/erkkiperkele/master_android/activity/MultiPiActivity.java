@@ -221,7 +221,7 @@ public class MultiPiActivity extends AppCompatActivity
     public native JResult calculatePi(int numberOfOperations, int numberOfThreads);
 
     static {
-        System.loadLibrary("parallel-pi-lib");
+        System.loadLibrary("parallel_pi_service");
     }
 
     /**

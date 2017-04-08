@@ -2,10 +2,10 @@
 #include <cmath>
 
 #include <omp.h>
-#include "ParallelCalculations.h"
+#include "parallel_pi_calculations.h"
 
 
-float ParallelCalculations::CalculateParallelPi(int numberOfOperations, int numberOfThreads) {
+float ParallelPiCalculations::CalculateParallelPi(int numberOfOperations, int numberOfThreads) {
     int circle_count = 0;
     int num_threads = numberOfThreads;  // Used in the pragma declaration
 
@@ -17,7 +17,7 @@ float ParallelCalculations::CalculateParallelPi(int numberOfOperations, int numb
         for (int i = 0; i < threadNumberOfOperations; i++) {
             float x = (float) rand() / (float) RAND_MAX;
             float y = (float) rand() / (float) RAND_MAX;
-            bool isInCircle = ParallelCalculations::FindIsInCircle(x, y);
+            bool isInCircle = ParallelPiCalculations::FindIsInCircle(x, y);
 
             if (isInCircle) {
                 ++innerCircleCount;
@@ -33,7 +33,7 @@ float ParallelCalculations::CalculateParallelPi(int numberOfOperations, int numb
     return PI;
 }
 
-bool ParallelCalculations::FindIsInCircle(float x, float y) {
+bool ParallelPiCalculations::FindIsInCircle(float x, float y) {
     double distance = sqrt(pow(x, 2) + pow(y, 2));
     return distance < 1;
 }

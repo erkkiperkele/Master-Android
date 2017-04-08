@@ -1,7 +1,7 @@
-#ifndef _PARALLELCALCULATIONS_H
-#define _PARALLELCALCULATIONS_H
+#ifndef _PARALLELPICALCULATIONS_H
+#define _PARALLELPICALCULATIONS_H
 
-class   ParallelCalculations{
+class   ParallelPiCalculations{
 
 public:
     static float CalculateParallelPi(int numberOfOperations, int numberOfThreads);

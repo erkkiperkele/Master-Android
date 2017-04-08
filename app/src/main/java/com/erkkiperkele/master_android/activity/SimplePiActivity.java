@@ -303,7 +303,7 @@ public class SimplePiActivity extends AppCompatActivity
     public native JResult calculatePi(int numberOfOperations);
 
     static {
-        System.loadLibrary("pi-lib");
+        System.loadLibrary("simple_pi_service");
     }
 
     /**

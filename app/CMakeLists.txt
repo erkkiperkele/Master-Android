@@ -4,21 +4,6 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
-# Creates and names a library, sets it as either STATIC
-# or SHARED, and provides the relative paths to its source code.
-# You can define multiple libraries, and CMake builds it for you.
-# Gradle automatically packages shared libraries with your APK.
-
-add_library( # Sets the name of the library.
-             native-lib
-
-             # Sets the library as a shared library.
-             SHARED
-
-             # Provides a relative path to your source file(s).
-             # Associated headers in the same location as their source
-             # file are automatically included.
-             src/main/cpp/native-lib.cpp )
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because system libraries are included in the search path by
@@ -33,40 +18,30 @@ find_library( # Sets the name of the path variable.
               # you want CMake to locate.
               log )
 
-# Specifies libraries CMake should link to your target library. You
-# can link multiple libraries, such as libraries you define in the
-# build script, prebuilt third-party libraries, or system libraries.
-
-target_link_libraries( # Specifies the target library.
-                       native-lib
-
-                       # Links the target library to the log library
-                       # included in the NDK.
-                       ${log-lib} )
-
-
 #libraries to build
 
 add_library(
-    ParallelCalculations
+    pi_calculations
     SHARED
-    src/main/cpp/ParallelCalculations.cpp)
+    src/main/cpp-shared/simple_pi_calculations.cpp
+    src/main/cpp-shared/parallel_pi_calculations.cpp)
 
 add_library(
-    pi-lib
+    simple_pi_service
     SHARED
-    src/main/cpp/simple-pi.cpp)
+    src/main/cpp/simple_pi_service.cpp)
 
 add_library(
-    parallel-pi-lib
+    parallel_pi_service
     SHARED
-    src/main/cpp/parallel-pi.cpp)
+    src/main/cpp/parallel_pi_service.cpp)
 
 target_link_libraries(
-    parallel-pi-lib
-    ParallelCalculations
+    parallel_pi_service
+    pi_calculations
     ${log-lib})
 
 target_link_libraries(
-    pi-lib
+    simple_pi_service
+    pi_calculations
     ${log-lib})

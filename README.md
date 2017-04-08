@@ -1,6 +1,11 @@
 # Master-Android
 I wish I knew (better)
 
+## General
+
+* Style guide
+https://google.github.io/styleguide/cppguide.html
+
 
 ## Useful links on how to add C++ libs to Android project
 
