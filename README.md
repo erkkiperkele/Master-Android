@@ -31,6 +31,8 @@ https://github.com/sh1r0/caffe-android-lib
 * Caffe Android Demo (same guy as the lib):
 https://github.com/sh1r0/caffe-android-demo
 
+* TensorFlow Models:
+https://github.com/tensorflow/models
 
 
 
